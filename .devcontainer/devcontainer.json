@@ -1,0 +1,17 @@
+{
+  "name": "CineVault",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "forwardPorts": [5173, 4000],
+  "portsAttributes": {
+    "5173": {
+      "label": "Frontend (Vite)",
+      "onAutoForward": "openPreview"
+    },
+    "4000": {
+      "label": "Backend API",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "npm install && npm run db:reset",
+  "postAttachCommand": "npm run dev"
+}

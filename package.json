@@ -1,0 +1,20 @@
+{
+  "name": "cinevault",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "test": "npm run test -w backend",
+    "build": "npm run typecheck -w backend && npm run build -w frontend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "db:reset": "node -e \"const fs=require('fs'),d='backend/data';if(fs.existsSync(d))for(const f of fs.readdirSync(d))if(/[.]db(-wal|-shm)?$/.test(f))fs.rmSync(d+'/'+f)\" && npm run db:migrate && npm run db:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
