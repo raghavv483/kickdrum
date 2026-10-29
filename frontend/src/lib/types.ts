@@ -46,3 +46,12 @@ export interface ApiErrorBody {
     details?: ApiErrorDetail[];
   };
 }
+export interface MovieInput {
+ title: string;
+ description: string;
+ director: string;
+ releaseYear: number;
+ durationMinutes: number;
+ rating: number;
+ genreId: number;
+}

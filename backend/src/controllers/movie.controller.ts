@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import * as movieService from '../services/movie.service.js';
 import { parseId } from '../utils/parse-id.js';
+import { MovieDTO } from '../dtos/movie.dto.js';
 
 export function listMovies(_req: Request, res: Response, next: NextFunction): void {
   try {
@@ -17,4 +18,15 @@ export function getMovie(req: Request<{ id: string }>, res: Response, next: Next
   } catch (err) {
     next(err);
   }
+}
+
+export function updateMovie(req: Request<{ id: string }>, res: Response, next: NextFunction):
+ void {
+ try {
+ const id = parseId(req.params.id, 'movie id');
+ const input = req.body as MovieDTO;
+ res.status(200).json(movieService.updateMovie(id, input));
+ } catch (err) {
+ next(err);
+ }
 }

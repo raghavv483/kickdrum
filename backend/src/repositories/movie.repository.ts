@@ -1,6 +1,6 @@
 import { db } from '../db/connection.js';
 import type { MovieDetail, MovieRow, MovieSummary } from '../models/movie.model.js';
-
+import { MovieDTO } from '../dtos/movie.dto.js';
 function toMovie(row: MovieRow): MovieDetail {
   return {
     id: row.id,
@@ -79,4 +79,29 @@ export function existsById(id: number): boolean {
     .get(id);
 
   return row !== undefined;
+}
+export function update(id: number, input: MovieDTO): MovieDetail | undefined {
+  db.prepare<[string, string, string, number, number, number, number, number]>(
+    `UPDATE movies
+        SET title = ?,
+            description = ?,
+            director = ?,
+            release_year = ?,
+            duration_minutes = ?,
+            rating = ?,
+            genre_id = ?,
+            updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?`,
+  ).run(
+    input.title,
+    input.description,
+    input.director,
+    input.releaseYear,
+    input.durationMinutes,
+    input.rating,
+    input.genreId,
+    id,
+  );
+
+  return findById(id);
 }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import EditMovieForm from '../components/EditMovieForm';
 import ErrorMessage from '../components/ErrorMessage';
 import Modal from '../components/Modal';
 import ReviewForm from '../components/ReviewForm';
@@ -31,6 +32,7 @@ export default function MovieDetailsPage() {
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const loadReviews = useCallback(() => {
     return getReviews(movieId)
@@ -73,6 +75,11 @@ export default function MovieDetailsPage() {
     void loadReviews();
   }
 
+  function handleMovieUpdated(updated: MovieDetail) {
+    setMovie(updated);
+    setIsEditOpen(false);
+  }
+
   if (isLoading) return <Spinner label="Loading movie…" />;
 
   if (notFound) {
@@ -103,6 +110,9 @@ export default function MovieDetailsPage() {
         <div className="movie-tags">
           <span className="genre-badge">{movie.genre.name}</span>
           <span className="rating-badge large">{movie.rating.toFixed(1)}/10</span>
+          <button type="button" className="button" onClick={() => setIsEditOpen(true)}>
+            Edit movie
+          </button>
         </div>
       </header>
 
@@ -135,6 +145,14 @@ export default function MovieDetailsPage() {
 
       <Modal isOpen={isFormOpen} title="Write a review" onClose={() => setIsFormOpen(false)}>
         <ReviewForm movieId={movie.id} onSuccess={handleReviewCreated} />
+      </Modal>
+
+      <Modal isOpen={isEditOpen} title="Edit movie" onClose={() => setIsEditOpen(false)}>
+        <EditMovieForm
+          movie={movie}
+          onSaved={handleMovieUpdated}
+          onCancel={() => setIsEditOpen(false)}
+        />
       </Modal>
     </article>
   );

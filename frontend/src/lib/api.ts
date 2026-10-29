@@ -4,6 +4,7 @@ import type {
   CreateReviewInput,
   Genre,
   MovieDetail,
+  MovieInput,
   MovieSummary,
   Review,
 } from './types';
@@ -71,4 +72,10 @@ export function createReview(movieId: number, input: CreateReviewInput): Promise
     method: 'POST',
     body: JSON.stringify(input),
   });
+}
+export function updateMovie(movieId: number,input: MovieInput): Promise<MovieDetail>{
+  return request<MovieDetail>(`/movies/${movieId}`,{
+    method: 'PUT',
+    body: JSON.stringify(input),
+  })
 }

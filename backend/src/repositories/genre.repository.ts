@@ -15,3 +15,10 @@ export function findAll(): Genre[] {
 
   return rows.map(toGenre);
 }
+export function existsById(id: number): boolean {
+  const row = db
+    .prepare<[number], { id: number }>('SELECT id FROM genres WHERE id = ?')
+    .get(id);
+
+  return row !== undefined;
+}
